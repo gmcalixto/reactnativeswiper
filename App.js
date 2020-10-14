@@ -1,19 +1,51 @@
-import React, { Component } from 'react';
+import React, { Component,useState } from 'react';
 import { Text, View, StyleSheet } from 'react-native';
 import Swiper from 'react-native-swiper' 
 
+import {store} from './Store'
+
 export default class App extends Component {
+  
+  constructor(props){
+    super(props)
+    this.state = {
+      texto : "teste"
+    }
+  }
+
+  invokeText(index){
+    if(index==0){
+      store.dispatch({type: 'PAGE_0'})
+    }
+    else if(index==1){
+      store.dispatch({type: 'PAGE_1'})
+    }
+    else{
+      store.dispatch({type: 'PAGE_2'})
+    }
+  }
+
+  componentDidMount(){
+    store.dispatch({type: 'PAGE_0'})
+  }
+  
   render() {
+
+    store.subscribe(() => this.setState({texto: store.getState()}))
+
     return (
-      <Swiper style={styles.wrapper} showsButtons={true} loop={false}>
+      <Swiper style={styles.wrapper} 
+              showsButtons={true} 
+              loop={false}
+              onIndexChanged={(index) => (this.invokeText(index))}>
         <View style={styles.slide}>
-          <Text style={styles.text}>Do mesmo modo, o aumento do diálogo entre os diferentes setores produtivos assume importantes posições no estabelecimento de todos os recursos funcionais envolvidos.</Text>
+          <Text style={styles.text}>{this.state.texto}</Text>
         </View>
         <View style={styles.slide}>
-          <Text style={styles.text}>Pensando mais a longo prazo, a adoção de políticas descentralizadoras faz parte de um processo de gerenciamento da gestão inovadora da qual fazemos parte.</Text>
+          <Text style={styles.text}>{this.state.texto}</Text>
         </View>
         <View style={styles.slide}>
-          <Text style={styles.text}>Pensando mais a longo prazo, a percepção das dificuldades promove a alavancagem das formas de ação.</Text>
+          <Text style={styles.text}>{this.state.texto}</Text>
         </View>
       </Swiper>
     );
